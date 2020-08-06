@@ -1,0 +1,45 @@
+﻿body {
+    margin:0;
+}
+
+.inputfield{
+    display:block;
+    grid-area:inp;
+    resize:none;
+}
+
+.result {
+    display: block;
+    grid-area: res;
+    resize: none;
+}
+
+.errors {
+    display: block;
+    grid-area: err;
+    resize: none;
+}
+
+.button{
+    display:block;
+    grid-area:but;
+}
+
+.title{
+    display:block;
+    grid-area:tit;
+    text-align:center;
+    font-size:36px;
+    font-weight:700;
+}
+
+
+.page_grid {
+    display: grid;
+    width: 100%;
+    height: 100vh;
+    grid-template-rows: 1fr 7fr 1fr 5fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 2.5fr 2fr 2.5fr 1fr 7fr 1fr;
+    grid-template-areas: ". tit tit tit tit tit ." ". inp inp inp . res ." ". inp inp inp . . ." ". inp inp inp . err ." ". . . . . err ." ". . but . . err ." ". . . . . . .";
+}
+

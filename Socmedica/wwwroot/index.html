@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <meta charset="utf-8" />
+    <title>Тестовое задание by Данила Золотопупов</title>
+</head>
+<body>
+    <div class="page_grid">
+        <div class="title">SOCMEDICA</div>
+        <textarea id="textarea_input" class="inputfield" multiple="true" placeholder="Введите названия лекарств сюда (по наименованию на строку)"></textarea>
+        <textarea id="textarea_result" class="result" multiple="true" readonly="readonly"></textarea>
+        <textarea id="textarea_error" class="errors" multiple="true" readonly="readonly"></textarea>
+        <button class="button" onclick="onGoButtonPress()">GO</button>
+    </div>
+    
+    <script>
+
+        function onGoButtonPress() {
+            let names = document.getElementById("textarea_input").value.split(/\r?\n/);
+            let requestData = { names: names };
+            var xhr = new XMLHttpRequest();
+
+            function processResponse() {
+                let body = xhr.response;
+                let responseData = JSON.parse(body);
+                if (responseData.drugIntersections != null) {
+                    let resultingText = "";
+                    responseData.drugIntersections.forEach(el => {
+                        resultingText += "Препараты ";
+                        for (let i = 0; i < el.names.length; i++) {
+                            resultingText += el.names[i] + ((i < el.names.length - 1) ? ", " : " ");
+                        }
+                        resultingText += " имеют следующие сходства: ";
+                        for (let i = 0; i < el.intersections.length; i++) {
+                            resultingText += el.intersections[i] + ((i < el.intersections.length - 1) ? ", " : ".\n");
+                        }
+                    });
+                    document.getElementById("textarea_result").value = resultingText;
+                }
+                else {
+                    document.getElementById("textarea_result").value = "Никаких сходств не обнаружено.";
+                }
+                
+
+                
+                document.getElementById("textarea_error").value = responseData.errorMessage;
+            }
+
+            xhr.onreadystatechange = processResponse;
+
+
+            xhr.open("POST", "/api/drug", true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify(requestData));
+            
+        }
+
+        
+    </script>
+</body>
+
+</html>
